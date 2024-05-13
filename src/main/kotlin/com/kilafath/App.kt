@@ -1,14 +1,13 @@
 package com.kilafath
-import com.kilafath.day01.Day01
-import com.kilafath.day02.Day02
-import com.kilafath.day03.Day03
 
 fun main(args: Array<String>) {
     val dayNumber = args.getOrElse(0) {"03"}
-    when(dayNumber) {
-        "01" -> Day01()
-        "02" -> Day02()
-        "03" -> Day03()
-        else -> println("input: $dayNumber :- either invalid or not solved yet. Input have to be of the form '01'")
+    val day = when(dayNumber) {
+        in "01".."03" -> "com.kilafath.day$dayNumber.Day$dayNumber"
+        else -> {
+            println("input: $dayNumber :- either invalid or not solved yet. (input have to be of the form '01')")
+            return
+        }
     }
+    Class.forName(day).getDeclaredConstructor().newInstance()
 }
