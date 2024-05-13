@@ -22,7 +22,7 @@ class Day02 {
         val pattern = Regex("""\b([^ \n]+)\b(?=\s*$match)""")
         val matches = pattern.findAll(this)
         return matches.fold(Int.MIN_VALUE) {maxV, elem ->
-            val elemV = elem.groupValues[1].toInt()
+            val elemV = elem.groupValues[0].toInt()
             if (maxV < elemV) elemV else maxV
         }
     }
