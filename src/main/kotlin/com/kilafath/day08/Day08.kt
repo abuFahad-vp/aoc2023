@@ -17,12 +17,9 @@ class Day08 {
             val left = Regex("""(?<=\()\w+""").findAll(code).elementAt(0).value
             val right = Regex("""\w+(?=\))""").findAll(code).elementAt(0).value
             terrain[start] = Pair(left,right)
-            if (start[2] == 'A') {
-                acc + start
-            }else {
-                acc
-            }
+            if (start[2] == 'A')  acc + start else acc
         }
+
         val part1 = traverse()
         val part2 = startNodes.map {node ->
             traverse(node, endPattern = Regex("""\w\wZ"""))
