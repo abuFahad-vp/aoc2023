@@ -1,7 +1,6 @@
 package com.kilafath.day07
 
 import kotlin.math.min
-import kotlin.math.max
 import com.kilafath.*
 
 class Day07 {
@@ -25,7 +24,6 @@ class Day07 {
 
     private fun Set<String>.sortHeads(isJoker: Boolean): List<String> {
         val sortAns = this.sortedWith(HandComparator(isJoker))
-        println(sortAns)
         return sortAns
     }
 
@@ -36,7 +34,6 @@ class Day07 {
 
             val handValue2 = str2.countCharacters()
             val cardValue2 = str2.cardValue()
-            println("$cardValue1 - $cardValue2 - $handValue1 - $handValue2")
 
             val sortValue = compareList(handValue1,handValue2)
             return if (sortValue == 0) {
@@ -49,7 +46,6 @@ class Day07 {
         private fun compareList(l1: List<Int>, l2: List<Int>): Int {
             for(i in 0..min(l1.lastIndex,l2.lastIndex)) {
                 if (l1[i] > l2[i]) {
-                    println("sort value = ${l1[i]}")
                     return 1
                 }else if(l2[i] > l1[i]) {
                     return -1
@@ -61,6 +57,15 @@ class Day07 {
         private fun String.countCharacters(): List<Int> {
             val charCount = mutableMapOf<Char, Int>()
             for (char in this) charCount[char] = charCount.getOrDefault(char, 0) + 1
+            if (isJoker && 'J' in this) {
+                val jCount = charCount['J']!!
+                if (jCount < 5) {
+                    charCount.remove('J')
+                    val cardOccurence = charCount.values.sortedDescending().toMutableList()
+                    cardOccurence[0] += jCount
+                    return cardOccurence
+                }
+            }
             return charCount.values.sortedDescending()
         }
 
