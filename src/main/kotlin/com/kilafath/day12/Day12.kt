@@ -18,7 +18,7 @@ class Day12 {
         println("part 1: $part1, part 2: $part2")
     }
 
-    private fun countValidCombinations(seq: String, records: List<Int>): Long {
+    fun countValidCombinations(seq: String, records: List<Int>): Long {
         if (cache[Pair(seq,records)] != null) return cache[Pair(seq,records)]!!
         if (records.isEmpty()) return if ('#' in seq) 0 else 1
         if (seq.isEmpty()) return if (records.isEmpty()) 1 else 0
