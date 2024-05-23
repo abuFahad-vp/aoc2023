@@ -10,6 +10,7 @@ repositories {
 
 dependencies {
     implementation("org.apache.commons:commons-math3:3.6.1")
+    testImplementation(kotlin("test"))
 }
 
 java {
@@ -20,4 +21,8 @@ java {
 
 application {
     mainClass = "com.kilafath.AppKt"
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
