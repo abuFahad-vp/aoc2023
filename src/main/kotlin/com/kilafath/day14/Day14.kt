@@ -5,22 +5,33 @@ import kotlin.math.sqrt
 
 class Day14 {
     init {
-        val input = readAsLines("day14/sample.txt").joinToString("").toMutableList()
-        tilt(input,'n')
-        tilt(input,'w')
-        tilt(input,'s')
-        tilt(input,'e')
-        printGridValue(input)
-        println(valueOfDish(input))
+        val input = readAsLines("day14/input.txt").joinToString("").toMutableList()
+        val cache = mutableListOf(mutableListOf<Char>())
+        val gridValues = mutableListOf<Long>()
+        val cycles = 1000000000
+        var firstCycle = -1
+        var cycleGrid: MutableList<Char> = mutableListOf()
+        for (i in 0..cycles) {
+            tilt(input,'n')
+            if(i == 0) println("part 1 = ${valueOfDish(input)}")
+            tilt(input,'w')
+            tilt(input,'s')
+            tilt(input,'e')
+            if (input == cycleGrid) {
+                val index = (cycles - (firstCycle-1)) % (i - firstCycle) + firstCycle - 2
+                println("part 2 = ${gridValues[index]}")
+                break
+            }
+            if (firstCycle == -1 && input in cache) {
+                cycleGrid = input.toMutableList()
+                firstCycle = i
+            }
+            cache.add(input.toMutableList())
+            gridValues.add(valueOfDish(input))
+        }
     }
 
     private fun tilt(arr: MutableList<Char>, direction: Char) {
-//        for (idx in 0 until sizeT) {
-//            for (i in idx..arr.lastIndex - 2 * sizeT step sizeT) {
-//                for (j in idx..arr.lastIndex-sizeT step sizeT) {
-//        for (idx in 0..<arr.size step sizeT ) {
-//            for (i in idx..idx+sizeT-3) {
-//                for (j in idx..idx+sizeT-2) {
         val sizeT = sqrt(arr.size.toDouble()).toInt()
         val rangeIdx:IntProgression
         val rangeInner:(idx: Int) -> IntProgression
@@ -52,46 +63,6 @@ class Day14 {
         }
     }
 
-    private fun tiltWestEast(arr: MutableList<Char>,isWest:Boolean = false) {
-        val compare = if (isWest) {
-            {a: Char, b: Char -> a == 'O' && b == '.'}
-        }else {
-            {a: Char, b: Char -> a == '.' && b == 'O'}
-        }
-        val sizeT = sqrt(arr.size.toDouble()).toInt()
-        for (idx in 0..<arr.size step sizeT ) {
-            for (i in idx..idx+sizeT-2) {
-                for (j in idx..idx+sizeT-2) {
-                    if (compare(arr[j],arr[j + 1])) {
-                        val temp = arr[j+1]
-                        arr[j+1] = arr[j]
-                        arr[j] = temp
-                    }
-                }
-            }
-        }
-    }
-
-    private fun tiltNorthSouth(arr: MutableList<Char>,isSouth: Boolean = false) {
-        val sizeT = sqrt(arr.size.toDouble()).toInt()
-        val compare = if (isSouth) {
-            {a: Char, b: Char -> a == 'O' && b == '.'}
-        }else {
-            {a: Char, b: Char -> a == '.' && b == 'O'}
-        }
-        for (idx in 0 until sizeT) {
-            for (i in idx..arr.lastIndex - 2 * sizeT step sizeT) {
-                for (j in idx..arr.lastIndex-sizeT step sizeT) {
-                    if (compare(arr[j], arr[j+sizeT])) {
-                        val temp = arr[j+sizeT]
-                        arr[j+sizeT] = arr[j]
-                        arr[j] = temp
-                    }
-                }
-            }
-        }
-    }
-
     private fun valueOfDish(arr: MutableList<Char>): Long {
         val sizeT = sqrt(arr.size.toDouble()).toInt()
         var value = 0L
@@ -106,7 +77,7 @@ class Day14 {
         return sum
     }
 
-    private fun printGridValue(input: MutableList<Char>) {
+    private fun printGrid(input: MutableList<Char>) {
         val sizeT = sqrt(input.size.toDouble()).toInt()
         for (i in input.indices) {
             print("${input[i]} ")
