@@ -77,11 +77,4 @@ class Day14 {
         return sum
     }
 
-    private fun printGrid(input: MutableList<Char>) {
-        val sizeT = sqrt(input.size.toDouble()).toInt()
-        for (i in input.indices) {
-            print("${input[i]} ")
-            if (i % sizeT == sizeT - 1) println()
-        }
-    }
 }
